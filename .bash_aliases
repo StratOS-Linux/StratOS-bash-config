@@ -1,5 +1,4 @@
 # -*- mode: fish; lexical-binding: t -*-
-#: Arco aliases {{{
 ### ALIASES ###
 #list
 alias ls='eza --color=always'
@@ -44,6 +43,7 @@ alias timedatefix = "timedatectl set-local-rtc 1 --adjust-system-clock"
 #pacman unlock
 alias unlock="sudo rm /var/lib/pacman/db.lck"
 alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
+alias fixpacman = "sudo rm /var/lib/pacman/db.lck"
 
 #free
 alias free="free -mt"
@@ -63,8 +63,8 @@ alias merge="xrdb -merge ~/.Xresources"
 alias update="sudo pacman -Syu --disable-download-timeout"
 
 # paru as aur helper - updates everything
-alias pksyua="paru -Syu --noconfirm"
-alias upall="paru -Syu --noconfirm"
+# alias pksyua="paru -Syu --noconfirm" # Uncomment this if you want to install paru
+alias upall="yay -Syu --noconfirm"
 
 #ps
 alias psa="ps auxf"
@@ -90,16 +90,16 @@ alias cz='cp /etc/skel/.zshrc ~/.zshrc && exec zsh'
 alias cf='cp /etc/skel/.config/fish/config.fish ~/.config/fish/config.fish && echo "Copied."'
 
 #switch between bash and zsh
-alias tobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
-alias tozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
-alias tofish="sudo chsh $USER -s /bin/fish && echo 'Now log out.'"
+alias switchtobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
+alias switchtozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
+alias switchtofish="sudo chsh $USER -s /bin/fish && echo 'Now log out.'"
 
 #switch between lightdm and sddm
-alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
-alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
-alias toly="sudo pacman -S ly --noconfirm --needed ; sudo systemctl enable ly.service -f ; echo 'Ly is active - reboot now'"
-alias togdm="sudo pacman -S gdm --noconfirm --needed ; sudo systemctl enable gdm.service -f ; echo 'Gdm is active - reboot now'"
-alias tolxdm="sudo pacman -S lxdm --noconfirm --needed ; sudo systemctl enable lxdm.service -f ; echo 'Lxdm is active - reboot now'"
+alias switchtolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
+alias switchtosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
+alias switchtoly="sudo pacman -S ly --noconfirm --needed ; sudo systemctl enable ly.service -f ; echo 'Ly is active - reboot now'"
+alias switchtogdm="sudo pacman -S gdm --noconfirm --needed ; sudo systemctl enable gdm.service -f ; echo 'Gdm is active - reboot now'"
+alias switchtolxdm="sudo pacman -S lxdm --noconfirm --needed ; sudo systemctl enable lxdm.service -f ; echo 'Lxdm is active - reboot now'"
 
 # kill commands
 # quickly kill conkies
@@ -108,6 +108,8 @@ alias kc='killall conky'
 alias kp='killall polybar'
 # quickly kill picom
 alias kpi='killall picom'
+# reload waybar after config change
+alias reloadwaybar="pkill -USR2 waybar"
 
 #hardware info --short
 alias hw="hwinfo --short"
@@ -140,12 +142,12 @@ alias rams='rate-mirrors --allow-root --disable-comments --protocol https arch  
 #shopt -s histappend # do not overwrite history
 #shopt -s expand_aliases # expand aliases
 
-#youtube download
-alias yta-aac="yt-dlp --extract-audio --audio-format aac "
-alias yta-best="yt-dlp --extract-audio --audio-format best "
-alias yta-flac="yt-dlp --extract-audio --audio-format flac "
-alias yta-mp3="yt-dlp --extract-audio --audio-format mp3 "
-alias ytv-best="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "
+#youtube download (Uncomment after installing yt-dlp)
+# alias yta-aac="yt-dlp --extract-audio --audio-format aac "
+# alias yta-best="yt-dlp --extract-audio --audio-format best "
+# alias yta-flac="yt-dlp --extract-audio --audio-format flac "
+# alias yta-mp3="yt-dlp --extract-audio --audio-format mp3 "
+# alias ytv-best="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "
 
 #Recent Installed Packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
@@ -208,7 +210,6 @@ alias fix-keyserver="[ -d ~/.gnupg ] || mkdir ~/.gnupg ; cp /etc/pacman.d/gnupg/
 
 #maintenance
 alias big="expac -H M '%m\t%n' | sort -h | nl"
-alias downgrada="sudo downgrade --ala-url https://ant.seedhost.eu/arcolinux/"
 
 #hblock (stop tracking with hblock)
 #use unhblock to stop using hblock
@@ -223,27 +224,10 @@ alias ssn="sudo shutdown now"
 alias sr="sudo reboot"
 
 #update betterlockscreen images
-alias bls="betterlockscreen -u /usr/share/backgrounds/arcolinux/"
+# alias bls="betterlockscreen -u /usr/share/backgrounds/arcolinux/"
 
 #give the list of all installed desktops - xsessions desktops
 alias xd="ls /usr/share/xsessions"
-#btrfs aliases
-alias btrfsfs="sudo btrfs filesystem df /"
-alias btrfsli="sudo btrfs su li / -t"
-
-#snapper aliases
-alias snapcroot="sudo snapper -c root create-config /"
-alias snapchome="sudo snapper -c home create-config /home"
-alias snapli="sudo snapper list"
-alias snapcr="sudo snapper -c root create"
-alias snapch="sudo snapper -c home create"
-
-#Leftwm aliases
-alias lti="leftwm-theme install"
-alias ltu="leftwm-theme uninstall"
-alias lta="leftwm-theme apply"
-alias ltupd="leftwm-theme update"
-alias ltupg="leftwm-theme upgrade"
 
 #remove
 alias rmgitcache="rm -r ~/.cache/git"
@@ -252,8 +236,6 @@ alias rmgitcache="rm -r ~/.cache/git"
 
 alias ascii="awk 'BEGIN {for (i = 33; i < 129; i++) printf \"%3d 0x%02x %c\n\", i, i, i}'  | nbat"
 alias mdp="mkdir -p"
-alias db="TERM=xterm-256color distrobox"
-alias dbx="TERM=xterm-256color distrobox"
 alias xhost-thing="xhost +si:localuser:$USER"
 alias chm="chmod +x"
 alias killall="pkill" # for some reason kilalll doesn't work on nixos
@@ -270,25 +252,15 @@ alias octave="octave -H -q" # no command history, no startup messages
 alias dust="dust -r" # dust is in dotfiles/scripts
 alias bat="bat --plain --number --color=always" 
 alias ncbat="bat --plain --color never"
-alias plog="podman logs -f"
-alias docker=podman
 alias notif-daemon="busctl --user list | grep org.freedesktop.Notifications"
 alias nbat="bat --plain --color=always" # don't show line numbers
 alias batn="bat --plain --color=always" # don't show line numbers
 alias grh="git reset --hard"
 alias gd="git diff"
 alias gp='git push origin $(git branch | awk "{printf \$2} ")'
-alias ssh-pi="term && ssh raspberry@192.168.0.9"
-alias cdwm="cd ~/.config/arco-chadwm/chadwm"
-alias tor-browser="env HOME=~/Downloads/Tor ~/Downloads/Tor/tor-browser/Browser/start-tor-browser "
 # alias nf="neofetch --ascii_distro Archlinux"
 alias nf=neofetch
-alias cling="~/Downloads/cling_2020-11-05_ROOT-ubuntu2004/bin/cling"
 alias eho="echo"
-alias ewwd="eww -c $HOME/.dotfiles/eww/dashboard/ daemon"
-alias eww-dash="eww -c $HOME/.dotfiles/eww/dashboard/"
-alias eww-bar="eww -c $HOME/.dotfiles/eww/bar/"
-alias ewwb="eww -c $HOME/.dotfiles/eww/bar/ daemon"
 alias eco="echo"
 alias cdot="cd $HOME/.dotfiles"
 alias cd-="cd -"
@@ -296,15 +268,10 @@ alias dot="cd ~/.dotfiles"
 alias am="appman" # from dotfiles/scripts
 alias lsblk="lsblk -o name,mountpoint,label,size"
 alias star=starship
-alias swb="swaybg -i"
 alias sww="swww"
 alias swwww="swww"
 #alias nvim=lvim
-alias v="notify-send 'Vim? Am I a joke to you??' && ~/.dotfiles/scripts/emt"
-alias nvim=v
-alias vim=nvim
 alias compile-run="compile" # from dotfiles/scripts
-alias ds="doom sync" # du won't work tho
 alias c="cd"
 alias wh="which"
 alias killalll=killall # embarassing typo
@@ -312,9 +279,8 @@ alias ka="killall"
 alias gcc="gcc -g"
 alias ggcc="gcc -g"
 alias gccg="gcc -g"
-alias edit-linker="nvim ~/.dotfiles/scripts/linker"
+# alias edit-linker="nvim ~/.dotfiles/scripts/linker"
 alias pr=procs
-alias wi="wezterm imgcat"
 alias ki="kitten icat" # WezTerm imgcat doesnt work on XWayland
 alias s=sudo
 alias gdb="gdb -q"
@@ -329,14 +295,11 @@ alias rmr="rm -rf"
 alias paru="yay --answerdiff None --answerclean None --removemake --sudoloop"
 alias pacman-checkmissing="pacman -Qk 2>/dev/null | rg -e \"[^0] missing files\""
 alias yay="yay --sudoloop"
-# alias aura="sudo aura"
-# alias yay="sudo aura"
-# alias paru="sudo aura"
 alias rmrf="sudo rm -rf"
 alias chup="pacman -Qu" # checkupdates
 alias cu="checkupdates"
 alias tou=touch
-alias zshc="emc $HOME/.dotfiles/shells/zsh/zshrc"
+# alias zshc="emc $HOME/.dotfiles/shells/zsh/zshrc"
 # alias zshc="nvim $HOME/.dotfiles/shells/zsh/zshrc"
 alias config="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 alias show-bgs="feh -d ~/.dotfiles/wallpapers" # or the ~/.wallpapers symlink
@@ -366,22 +329,9 @@ alias restartu="systemctl --user restart"
 alias start-sshd="sudo systemctl start sshd"
 alias stop-sshd="sudo systemctl stop sshd &> /dev/null"
 alias restart-sshd="stop-libvirtd && start-libvirtd"
-alias cd-blog="cd ~/Git/blog/zstgblog/"
+# alias cd-blog="cd ~/Git/blog/zstgblog/"
 # alias get-ip="echo -e 'Public: $(curl ifconfig.me 2>/dev/null)\nPrivate: $(ip a | grep -E 'inet 192\.168\.0\.[0-9]+' | awk '{print $2}' | cut -d/ -f1)'"
 
-# NIXOS ALIASES
-alias nixos-edit="nano $HOME/.dotfiles/nixos/configuration.nix"
-# alias rebuild="clear && sudo nixos-rebuild --fast "
-alias rebuild-switch="clear && sudo nixos-rebuild --fast switch"
-alias nixos-test="clear && sudo nixos-rebuild --fast build" 
-alias rebuild-test="clear && sudo nixos-rebuild --fast test" 
-alias flake-rebuild="sudo nixos-rebuild --flake $HOME/.dotfiles/nixos --impure" # defaults to rebuilding current device's config
-alias flake-rebuild-switch="sudo nixos-rebuild --flake $HOME/.dotfiles/nixos --impure switch" # defaults to rebuilding current device's config
-alias flake-rebuild-test="sudo nixos-rebuild --flake $HOME/.dotfiles/nixos#nixOS --impure test"
-# alias nix-shell="HOME=/home/stig/.cache nix-shell -p"
-alias nix-shell="HOME=/home/stig/.cache nix-shell"
-alias nix-shellp="HOME=/home/stig/.cache nix-shell -p"
-alias nix-search="nix search nixpkgs"
 alias ai="appimage-run"
 alias ai-run="appimage-run"
 # alias gcc="clang"
