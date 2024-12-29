@@ -1,2 +1,3 @@
 source ~/.bash_aliases
-eval "$(starship init bash)"
+eval "$("/usr/bin/starship" init bash --print-full-init)"
+
